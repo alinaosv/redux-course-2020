@@ -1,7 +1,9 @@
-export function rootReducer(state, action) {
-    if (action.type === 'INCREMENT') return state + 1;
+import {INCREMENT, DECREMENT} from './types';
 
-    if (action.type === 'DECREMENT') return state - 1;
+export function rootReducer(state, action) {
+    if (action.type === INCREMENT) return state + 1;
+
+    if (action.type === DECREMENT) return state - 1;
 
     return state;
 }
