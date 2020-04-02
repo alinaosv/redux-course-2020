@@ -45,6 +45,10 @@ store.subscribe(() => {
     const state = store.getState();
 
     counter.textContent = state.counter;
-    document.body.classList.toggle(state.theme.value); 
+    document.body.classList.toggle(state.theme.value);
+
+    [addBtn, subBtn, themeBtn, asyncBtn].forEach(
+        btn => btn.disabled = state.theme.disabled
+    )
 });
 store.dispatch({type: 'INIT_APPLICATION'});
