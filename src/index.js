@@ -32,6 +32,18 @@ function asyncMiddleware(middlewareAPI) {
     }
 }
 
+const timeoutMiddleware = store => next => action => {
+    if (!action.meta && !(action.meta || {}).delay) {
+        return next(action);
+    }
+
+    const timerId = setTimeout(() => next(action), action.meta.delay);
+
+    return function() {
+        clearTimeout(timerId);
+    };
+}
+
 
 // If redux-dev-tools are not installed
 /* const store = createStore(
@@ -47,7 +59,7 @@ const store = createStore(
     rootReducer,
     composeWithDevTools(
         // applyMiddleware(thunk, logger), // (createStore) => () => {}
-        applyMiddleware(asyncMiddleware, logger),
+        applyMiddleware(asyncMiddleware, timeoutMiddleware, logger),
     ),
 );
 
@@ -79,6 +91,7 @@ store.subscribe(() => {
     const state = store.getState();
 
     counter.textContent = state.counter;
+    document.body.classList.remove('light', 'dark');
     document.body.classList.toggle(state.theme.value);
 
     [addBtn, subBtn, themeBtn, asyncBtn].forEach(

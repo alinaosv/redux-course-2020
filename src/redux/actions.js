@@ -44,5 +44,8 @@ export function changeTheme(theme) {
     return {
         type: CHANGE_THEME,
         payload: theme,
+        meta: {
+            delay: 1500,
+        },
     };
 }
