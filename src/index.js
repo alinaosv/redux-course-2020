@@ -22,6 +22,17 @@ function logger(middlewareAPI) {
     }
 }
 
+function asyncMiddleware(middlewareAPI) {
+    return function(next) {
+        return function(action) {
+            return typeof action === 'function'
+                ? action(store.dispatch, store.getState)
+                : next(action);
+        }
+    }
+}
+
+
 // If redux-dev-tools are not installed
 /* const store = createStore(
     rootReducer,
@@ -35,7 +46,8 @@ function logger(middlewareAPI) {
 const store = createStore(
     rootReducer,
     composeWithDevTools(
-        applyMiddleware(thunk, logger), // (createStore) => () => {}
+        // applyMiddleware(thunk, logger), // (createStore) => () => {}
+        applyMiddleware(asyncMiddleware, logger),
     ),
 );
 

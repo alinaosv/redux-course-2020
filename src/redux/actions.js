@@ -13,7 +13,9 @@ export function decrement() {
 }
 
 export function asyncIncrement() {
-    return dispatch => {
+    // this action won't work out of the box w/o asyncMiddleware, cause
+    // actions should return plain objects by default
+    return (dispatch, getState) => {
         dispatch({type: DISABLE_BUTTONS});
 
         setTimeout(
